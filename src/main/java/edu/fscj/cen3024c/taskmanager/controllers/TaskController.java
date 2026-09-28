@@ -55,7 +55,7 @@ public class TaskController {
                     .orElseThrow(() -> new PriorityNotFoundException(task.getPriority().getId()));
             task.setPriority(priority);
         }
-        // Swap each {"id": n} in "users" for the real user so the task is linked in user_tasks
+        // The JSON only sends user ids, so load each real user before saving, which fills the user_tasks join table
         if (task.getUsers() != null) {
             Set<User> users = task.getUsers().stream()
                     .map(user -> userService.findByIdEntity(user.getId()))

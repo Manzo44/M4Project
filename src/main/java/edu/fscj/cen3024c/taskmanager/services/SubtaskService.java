@@ -32,6 +32,7 @@ public class SubtaskService {
 
     // CRUD Methods with DTO conversion
 
+    // Every subtask, converted to DTOs
     @Transactional(readOnly = true)
     public List<SubtaskDTO> findAll() {
         return subtaskRepository.findAll()
@@ -40,6 +41,7 @@ public class SubtaskService {
                 .collect(Collectors.toList());
     }
 
+    // One subtask as a DTO, throwing a 404 exception when the id is not in the table
     @Transactional(readOnly = true)
     public SubtaskDTO findById(Integer id) {
         Subtask subtask = subtaskRepository.findById(id)
@@ -62,6 +64,7 @@ public class SubtaskService {
         return subtaskRepository.save(subtask);
     }
 
+    // Loads the existing subtask, overwrites the title and status, and saves it back
     @Transactional
     public SubtaskDTO updateSubtask(Integer id, Subtask subtaskDetails) {
         Subtask existingSubtask = subtaskRepository.findById(id)
@@ -74,6 +77,7 @@ public class SubtaskService {
         return convertToDTO(updatedSubtask);
     }
 
+    // Removing a subtask by id, or a 404 when it doesn't exist
     public void deleteById(Integer id) {
         if (!subtaskRepository.existsById(id)) {
             throw new SubtaskNotFoundException(id);

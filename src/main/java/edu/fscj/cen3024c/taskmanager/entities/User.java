@@ -22,7 +22,7 @@ public class User {
     @Column(nullable = false)
     private String password; // will be hashed in a later module
 
-    // Inverse side of the many-to-many; Task owns the user_tasks join table
+    // The other side of the many-to-many, Task owns the user_tasks join table so mappedBy points back to it
     @ManyToMany(mappedBy = "users")
     private Set<Task> tasks;
 

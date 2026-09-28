@@ -19,13 +19,15 @@ public class PriorityController {
     @Autowired
     private PriorityService priorityService;
 
-    // READ ONLY: priorities are fixed values loaded by data.sql
+    // Read only, the three priorities are loaded by data.sql at startup
 
+    // GET /priorities returns LOW, MEDIUM, and HIGH
     @GetMapping
     public List<Priority> getAllPriorities() {
         return priorityService.findAll();
     }
 
+    // GET /priorities/1 returns one priority, or a 404 when that id is missing
     @GetMapping("/{id}")
     public Priority getPriorityById(@PathVariable Integer id) {
         return priorityService.findById(id);

@@ -23,7 +23,7 @@ public class Subtask {
     @Column(nullable = false)
     private SubtaskStatus status = SubtaskStatus.PENDING; // default
 
-    // Many subtasks belong to one task; task_id is the foreign key in the subtasks table
+    // Many subtasks belong to one task, task_id is the foreign key column in the subtasks table
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;

@@ -28,6 +28,7 @@ public class UserService {
 
     // CRUD Methods with DTO conversion
 
+    // Every user, converted to DTOs
     @Transactional(readOnly = true)
     public List<UserDTO> findAll() {
         return userRepository.findAll()
@@ -36,6 +37,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    // One user as a DTO, throwing a 404 exception when the id is not in the table
     @Transactional(readOnly = true)
     public UserDTO findById(Integer id) {
         User user = userRepository.findById(id)
@@ -50,10 +52,12 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    // Saving a new user, the database assigns the id
     public User save(User user) {
         return userRepository.save(user);
     }
 
+    // Loads the existing user, overwrites the username and password, and saves it back
     @Transactional
     public UserDTO updateUser(Integer id, User userDetails) {
         User existingUser = findByIdEntity(id);
@@ -63,6 +67,7 @@ public class UserService {
         return convertToDTO(updatedUser);
     }
 
+    // Removing a user by id, or a 404 when it doesn't exist
     @Transactional
     public void deleteById(Integer id) {
         User user = findByIdEntity(id);
@@ -75,7 +80,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    // Entity to DTO Conversion
+    // Entity to DTO Conversion, only the id, username, and task ids go out, never the password
 
     public UserDTO convertToDTO(User user) {
         Set<Integer> taskIds = (user.getTasks() != null)

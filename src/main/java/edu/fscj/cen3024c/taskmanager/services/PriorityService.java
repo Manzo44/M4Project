@@ -22,11 +22,13 @@ public class PriorityService {
         this.priorityRepository = priorityRepository;
     }
 
+    // Every priority, LOW, MEDIUM, and HIGH
     @Transactional(readOnly = true)
     public List<Priority> findAll() {
         return priorityRepository.findAll();
     }
 
+    // One priority, throwing a 404 exception when the id is not in the table
     @Transactional(readOnly = true)
     public Priority findById(Integer id) {
         return priorityRepository.findById(id)

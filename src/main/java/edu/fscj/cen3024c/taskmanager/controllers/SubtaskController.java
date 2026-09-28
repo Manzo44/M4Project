@@ -21,31 +21,32 @@ public class SubtaskController {
     @Autowired
     private SubtaskService subtaskService;
 
-    // READ endpoints return DTOs
-
+    // GET /subtasks returns every subtask as a DTO
     @GetMapping
     public List<SubtaskDTO> getAllSubtasks() {
         return subtaskService.findAll();
     }
 
+    // GET /subtasks/1 returns one subtask, or a 404 when that id is missing
     @GetMapping("/{id}")
     public SubtaskDTO getSubtaskById(@PathVariable Integer id) {
         return subtaskService.findById(id);
     }
 
-    // WRITE endpoints accept entities but return DTOs
-
+    // POST /subtasks saves a subtask under the task id in the JSON body
     @PostMapping
     public SubtaskDTO createSubtask(@RequestBody Subtask subtask) {
         Subtask savedSubtask = subtaskService.save(subtask);
         return subtaskService.convertToDTO(savedSubtask);
     }
 
+    // PUT /subtasks/1 updates the title and status, the parent task stays the same
     @PutMapping("/{id}")
     public SubtaskDTO updateSubtask(@PathVariable Integer id, @RequestBody Subtask subtask) {
         return subtaskService.updateSubtask(id, subtask);
     }
 
+    // DELETE /subtasks/1 removes the subtask and answers 204 No Content
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSubtask(@PathVariable Integer id) {
         subtaskService.deleteById(id);

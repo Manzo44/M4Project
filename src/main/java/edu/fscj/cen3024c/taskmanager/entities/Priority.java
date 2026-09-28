@@ -22,7 +22,7 @@ public class Priority {
     @Column(nullable = false, unique = true)
     private PriorityLevel level;
 
-    // Many tasks can share one priority; hidden from JSON to stop infinite recursion
+    // One priority can be shared by many tasks, @JsonIgnore keeps this list out of the JSON so it doesn't loop forever
     @OneToMany(mappedBy = "priority", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Task> tasks;
