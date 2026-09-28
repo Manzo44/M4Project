@@ -1,21 +1,25 @@
 // TaskController.java
-// D. Singletary
-// 9/10/25
-// Task controller for task manager application
+// Cristian Manzo
+// September 27, 2026
+// REST endpoints for tasks, including their priority and assigned users
 
 package edu.fscj.cen3024c.taskmanager.controllers;
 
 import edu.fscj.cen3024c.taskmanager.dto.TaskDTO;
 import edu.fscj.cen3024c.taskmanager.entities.Priority;
 import edu.fscj.cen3024c.taskmanager.entities.Task;
+import edu.fscj.cen3024c.taskmanager.entities.User;
 import edu.fscj.cen3024c.taskmanager.exceptions.PriorityNotFoundException;
 import edu.fscj.cen3024c.taskmanager.repositories.PriorityRepository;
 import edu.fscj.cen3024c.taskmanager.services.TaskService;
+import edu.fscj.cen3024c.taskmanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
@@ -26,6 +30,9 @@ public class TaskController {
 
     @Autowired
     private PriorityRepository priorityRepository;
+
+    @Autowired
+    private UserService userService;
 
     // READ endpoints return DTOs
 
@@ -47,6 +54,13 @@ public class TaskController {
             Priority priority = priorityRepository.findById(task.getPriority().getId())
                     .orElseThrow(() -> new PriorityNotFoundException(task.getPriority().getId()));
             task.setPriority(priority);
+        }
+        // Swap each {"id": n} in "users" for the real user so the task is linked in user_tasks
+        if (task.getUsers() != null) {
+            Set<User> users = task.getUsers().stream()
+                    .map(user -> userService.findByIdEntity(user.getId()))
+                    .collect(Collectors.toSet());
+            task.setUsers(users);
         }
         Task savedTask = taskService.save(task);
         return taskService.convertToDTO(savedTask);
