@@ -1,3 +1,8 @@
+// M4ProjectApplication.java
+// Cristian Manzo
+// September 27, 2026
+// Starts the Spring Boot task manager application
+
 package edu.fscj.cen3024c.taskmanager;
 
 import org.springframework.boot.SpringApplication;
